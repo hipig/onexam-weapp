@@ -1,12 +1,10 @@
 <template>
-  <view class="index">
+  <view class="my-20">
     <text>{{ msg }}</text>
   </view>
 </template>
 
 <script>
-import './index.css'
-
 export default {
   data () {
     return {
