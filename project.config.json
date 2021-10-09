@@ -1,0 +1,13 @@
+{
+  "miniprogramRoot": "./dist",
+  "projectname": "onexam",
+  "description": " 一款简洁，轻量的在线题库管理系统",
+  "appid": "touristappid",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false
+  },
+  "compileType": "miniprogram"
+}
