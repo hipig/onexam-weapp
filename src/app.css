@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 page {
-  @apply bg-gray-50;
+  @apply bg-gray-50 text-base;
 }
 
 button {
- @apply leading-5 px-0; 
+ @apply leading-5 px-0;
 }
 button::after {
   @apply border-0;

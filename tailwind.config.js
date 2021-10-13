@@ -130,7 +130,10 @@ module.exports = {
       '11_12': '91.666667%',
     }),
     screens: {},
-    extend: {},
+    extend: {
+      animation: {},
+      keyframes: {}
+    },
   },
   variants: {},
   plugins: [
