@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import './assets/css/font.css'
 import './app.css'
 
 const App = {

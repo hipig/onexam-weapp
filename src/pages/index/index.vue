@@ -22,20 +22,20 @@
           </view>
         </view>
         <view class="pl-4">
-          <button class="py-1 px-3_5 bg-white text-green-500 text-sm font-bold rounded-full whitespace-nowrap">切换科目</button>
+          <button class="py-1 px-3_5 bg-white text-green-500 text-sm font-bold rounded-full whitespace-nowrap" @tap="switchSubject">切换科目</button>
         </view>
       </view>
       <view class="grid grid-cols-4 py-3 text-xs text-gray-600">
         <view class="flex items-center">
-          <text class="text-lg text-gray-900 font-bold">162</text>
+          <text class="text-xl text-gray-900 blippo-becker">162</text>
           <text class="ml-1">收藏</text>
         </view>
         <view class="flex items-center">
-          <text class="text-lg text-gray-900 font-bold">99</text>
+          <text class="text-xl text-gray-900 blippo-becker">99</text>
           <text class="ml-1">错题</text>
         </view>
         <view class="flex items-center">
-          <text class="text-lg text-gray-900 font-bold">20</text>
+          <text class="text-xl text-gray-900 blippo-becker">20</text>
           <text class="ml-1">笔记</text>
         </view>
         <view class="flex items-center justify-end">
@@ -157,6 +157,8 @@ import heroCover from "../../assets/img/home/hero.png"
 import mockIcon from "../../assets/img/icons/mock.png"
 import oldIcon from "../../assets/img/icons/old.png"
 
+import { navigateTo } from "@tarojs/taro"
+
 export default {
   data () {
     return {
@@ -221,6 +223,11 @@ export default {
   methods: {
     toggleActive(index) {
       this.$set(this.subjectList[index], 'active', !this.subjectList[index].active)
+    },
+    switchSubject() {
+      navigateTo({
+        url: '/pages/subject/index'
+      })
     }
   }
 }

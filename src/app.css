@@ -12,3 +12,7 @@ button {
 button::after {
   @apply border-0;
 }
+
+.blippo-becker {
+  font-family: 'BlippoBeckerPoster';
+}
