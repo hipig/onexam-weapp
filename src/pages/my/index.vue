@@ -28,10 +28,11 @@
     <view class="py-2">
       <view class="px-5 flex items-center justify-between">
         <text>最近学习</text>
+        <text class="text-sm text-gray-500"><text class="text-gray-900">{{ currentIndex }}</text>/{{ learnRecordList.length }}</text>
       </view>
       <view class="px-5">
-        <scroll-view :scroll-x="true" class="whitespace-nowrap">
-          <view class="py-2 inline-flex" v-for="(item, index) in learnRecordList" :key="index" :class="index === learnRecordList.length-1 ? '' : 'pr-4'">
+        <scroll-view :scroll-x="true" @scroll="handleScroll" class="whitespace-nowrap">
+          <view class="py-2 inline-flex record-item" v-for="(item, index) in learnRecordList" :key="index" :class="index === learnRecordList.length-1 ? '' : 'pr-4'">
             <view class="w-64 bg-white px-4 py-3 mx-0_5 rounded-lg shadow">
               <view class="flex items-center justify-between text-sm text-gray-500">
                 <text>2021-10-14</text>
@@ -79,6 +80,7 @@
 </template>
 
 <script>
+import { createSelectorQuery } from "@tarojs/taro"
 import chevronRightIcon from "../../assets/img/icons/chevron-right.svg"
 
 const typeMap = {
@@ -101,7 +103,9 @@ export default {
     return {
       chevronRightIcon,
       typeMap,
-      learnRecordList: []
+      learnRecordList: [],
+      currentIndex: 1,
+      recordLeftList: []
     }
   },
   created() {
@@ -129,6 +133,25 @@ export default {
       }
     ]
   },
-  methods: {}
+  onReady() {
+    const query = createSelectorQuery()
+    let that = this
+    query.selectAll(".record-item").boundingClientRect().exec((res) => {
+      res[0].forEach((item) => {
+        let startW=item.left - 20
+        let endW=startW+item.width
+        that.recordLeftList.push({ startW, endW })
+      })
+    })
+  },
+  methods: {
+    handleScroll(e) {
+      let scrollLeft = e.detail.scrollLeft
+      this.recordLeftList.forEach((item, index) => {
+        let inView = scrollLeft > item.startW && scrollLeft <= item.endW
+        if(inView) return this.currentIndex = parseInt(index + 1)
+      })
+    }
+  }
 }
 </script>

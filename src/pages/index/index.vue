@@ -22,7 +22,7 @@
           </view>
         </view>
         <view class="pl-4">
-          <button class="py-1 px-3_5 bg-white text-green-500 text-sm font-bold rounded-full whitespace-nowrap" @tap="switchSubject">切换科目</button>
+          <button class="py-1 px-3_5 bg-white text-green-500 text-sm font-bold rounded-full whitespace-nowrap shadow-sm" @tap="switchSubject">切换科目</button>
         </view>
       </view>
       <view class="grid grid-cols-4 py-3 text-xs text-gray-600">
