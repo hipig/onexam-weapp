@@ -91,7 +91,7 @@
                     </view>
                   </view>
                   <view class="pl-4">
-                    <button class="px-5 py-1 bg-green-500 text-white text-sm rounded-md shadow-sm">练习</button>
+                    <button class="px-5 py-1 bg-green-500 text-white text-sm rounded-md shadow-sm" @tap="handleQuiz">练习</button>
                   </view>
                 </view>
                 <view class="absolute top-4_5 bottom-0 -left-5">
@@ -119,7 +119,7 @@
                       </view>
                     </view>
                     <view class="pl-4">
-                      <button class="px-5 py-1 bg-green-500 text-white text-sm rounded-md shadow-sm">练习</button>
+                      <button class="px-5 py-1 bg-green-500 text-white text-sm rounded-md shadow-sm" @tap="handleQuiz">练习</button>
                     </view>
                   </view>
                   <view class="absolute top-0 -left-5" :class="key === item.children.length-1 ? 'h-4' : 'bottom-0'">
@@ -145,6 +145,8 @@
 </template>
 
 <script>
+import { navigateTo, showToast } from "@tarojs/taro"
+
 import searchIcon from "../../assets/img/icons/search.svg"
 
 import shareIcon from "../../assets/img/icons/share.svg"
@@ -156,8 +158,6 @@ import heroCover from "../../assets/img/home/hero.png"
 
 import mockIcon from "../../assets/img/icons/mock.png"
 import oldIcon from "../../assets/img/icons/old.png"
-
-import { navigateTo } from "@tarojs/taro"
 
 export default {
   data () {
@@ -227,6 +227,13 @@ export default {
     switchSubject() {
       navigateTo({
         url: '/pages/subject/index'
+      })
+    },
+    handleQuiz(e) {
+      e.stopPropagation()
+      showToast({
+        title: '开始练习',
+        icon: 'none'
       })
     }
   }
