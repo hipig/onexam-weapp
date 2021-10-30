@@ -4,7 +4,10 @@ export default {
     'pages/my/index',
 
     'pages/subject/index',
-    'pages/subject/category/index'
+    'pages/subject/category/index',
+
+    'pages/exam/filter',
+    'pages/exam/modes/exercise'
   ],
   window: {
     backgroundTextStyle: 'light',

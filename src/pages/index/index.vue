@@ -77,14 +77,41 @@
       <view class="text-lg text-gray-900 font-bold mb-1">章节练习</view>
       <view class="flex flex-col">
         <view class="py-3" v-for="(item, index) in subjectList" :key="index">
-          <view class="bg-white rounded-lg shadow-md pl-10 pr-4" @tap="toggleActive(index)">
-            <view>
-              <view class="relative">
-                <view class="flex items-center justify-between">
-                  <view class="py-4 flex-1 flex flex-col border-0" :class="item.active ? 'border-b border-solid border-gray-100' : ''">
-                    <text class="text-base text-gray-900">{{ item.name }}</text>
+          <view class="bg-white rounded-lg shadow-md pl-10 pr-4">
+            <view class="relative" @tap="toggleActive(index)">
+              <view class="flex items-center justify-between">
+                <view class="py-4 flex-1 flex flex-col border-0" :class="item.active ? 'border-b border-solid border-gray-100' : ''">
+                  <text class="text-base text-gray-900">{{ item.name }}</text>
+                  <view class="mt-1">
+                    <view class="text-xs text-gray-500">{{ item.done_num + '/' + item.total_num }}</view>
+                    <view class="relative mt-2 w-36 h-2 bg-gray-100 rounded overflow-hidden">
+                      <view class="absolute inset-y-0 left-0 bg-green-500"></view>
+                    </view>
+                  </view>
+                </view>
+                <view class="pl-4">
+                  <button class="px-5 py-1 bg-green-500 text-white text-sm rounded-md shadow-sm" @tap="handleQuiz">练习</button>
+                </view>
+              </view>
+              <view class="absolute top-4_5 bottom-0 -left-5">
+                <view class="relative h-full">
+                  <view class="h-full" style="width:2px" :class="item.active ? 'bg-gray-100' : 'bg-transparent'"></view>
+                  <view class="absolute top-0 left-1_2 transform -translate-x-1_2">
+                    <view class="pb-0_5 bg-white leading-none">
+                      <image v-if="!item.active" :src="plusSquareIcon" class="block w-5 h-5" />
+                      <image v-else :src="minusSquareIcon" class="block w-5 h-5" />
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="flex flex-col" v-if="item.active">
+              <view class="relative" v-for="(value, key) in item.children" :key="key">
+                <view class="flex items-center justify-between" :class="key === item.children.length-1 ? '' : 'border-0 border-b border-solid border-gray-100'">
+                  <view class="py-4 flex-1 flex flex-col">
+                    <text class="text-sm text-gray-900">{{ value.name }}</text>
                     <view class="mt-1">
-                      <view class="text-xs text-gray-500">{{ item.done_num + '/' + item.total_num }}</view>
+                      <view class="text-xs text-gray-500">{{ value.done_num + '/' + value.total_num }}</view>
                       <view class="relative mt-2 w-36 h-2 bg-gray-100 rounded overflow-hidden">
                         <view class="absolute inset-y-0 left-0 bg-green-500"></view>
                       </view>
@@ -94,42 +121,13 @@
                     <button class="px-5 py-1 bg-green-500 text-white text-sm rounded-md shadow-sm" @tap="handleQuiz">练习</button>
                   </view>
                 </view>
-                <view class="absolute top-4_5 bottom-0 -left-5">
+                <view class="absolute top-0 -left-5" :class="key === item.children.length-1 ? 'h-4' : 'bottom-0'">
                   <view class="relative h-full">
-                    <view class="h-full" style="width:2px" :class="item.active ? 'bg-gray-100' : 'bg-transparent'"></view>
-                    <view class="absolute top-0 left-1_2 transform -translate-x-1_2">
-                      <view class="pb-0_5 bg-white leading-none">
-                        <image v-if="!item.active" :src="plusSquareIcon" class="block w-5 h-5" />
-                        <image v-else :src="minusSquareIcon" class="block w-5 h-5" />
-                      </view>
-                    </view>
-                  </view>
-                </view>
-              </view>
-              <view class="flex flex-col" v-if="item.active">
-                <view class="relative" v-for="(value, key) in item.children" :key="key">
-                  <view class="flex items-center justify-between" :class="key === item.children.length-1 ? '' : 'border-0 border-b border-solid border-gray-100'">
-                    <view class="py-4 flex-1 flex flex-col">
-                      <text class="text-sm text-gray-900">{{ value.name }}</text>
-                      <view class="mt-1">
-                        <view class="text-xs text-gray-500">{{ value.done_num + '/' + value.total_num }}</view>
-                        <view class="relative mt-2 w-36 h-2 bg-gray-100 rounded overflow-hidden">
-                          <view class="absolute inset-y-0 left-0 bg-green-500"></view>
-                        </view>
-                      </view>
-                    </view>
-                    <view class="pl-4">
-                      <button class="px-5 py-1 bg-green-500 text-white text-sm rounded-md shadow-sm" @tap="handleQuiz">练习</button>
-                    </view>
-                  </view>
-                  <view class="absolute top-0 -left-5" :class="key === item.children.length-1 ? 'h-4' : 'bottom-0'">
-                    <view class="relative h-full">
-                      <view class="h-full bg-gray-100" style="width:2px"></view>
-                      <view class="absolute top-4 left-1_2 transform -translate-x-1_2">
-                        <view class="bg-white leading-none">
-                          <view class="w-5 h-5 flex items-center justify-center">
-                            <view class="border-2 border-solid border-gray-200 rounded-sm" style="width: 3px; height: 3px"></view>
-                          </view>
+                    <view class="h-full bg-gray-100" style="width:2px"></view>
+                    <view class="absolute top-4 left-1_2 transform -translate-x-1_2">
+                      <view class="bg-white leading-none">
+                        <view class="w-5 h-5 flex items-center justify-center">
+                          <view class="border-2 border-solid border-gray-200 rounded-sm" style="width: 3px; height: 3px"></view>
                         </view>
                       </view>
                     </view>
@@ -231,9 +229,8 @@ export default {
     },
     handleQuiz(e) {
       e.stopPropagation()
-      showToast({
-        title: '开始练习',
-        icon: 'none'
+      navigateTo({
+        url: '/pages/exam/filter'
       })
     }
   }

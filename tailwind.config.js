@@ -131,6 +131,9 @@ module.exports = {
     }),
     screens: {},
     extend: {
+      height: {
+        'inherit': 'inherit'
+      },
       animation: {},
       keyframes: {}
     },

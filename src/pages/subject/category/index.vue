@@ -9,16 +9,16 @@
       </view>
     </view>
     <view class="flex-1 min-h-0 flex">
-      <view class="w-24 bg-white h-full">
+      <view class="w-28 bg-white h-full">
         <view class="text-sm text-center text-gray-500">
-          <view class="py-3_5" :class="[currentIndex === 0 ? 'bg-gray-50' : '']" @tap="handleNavTap(0)">推荐</view>
-          <view class="py-3_5" v-for="(item, index) in 10" :key="index" :class="[currentIndex === parseInt(index+1) ? 'bg-gray-50' : '']" @tap="handleNavTap(parseInt(index+1))">建筑类</view>
+          <view class="py-3_5" :class="[currentIndex === 0 ? 'bg-gray-50 text-green-500' : 'text-gray-500']" @tap="handleNavTap(0)">推荐</view>
+          <view class="py-3_5" v-for="(item, index) in 10" :key="index" :class="[currentIndex === parseInt(index+1) ? 'bg-gray-50 text-green-500' : 'text-gray-500']" @tap="handleNavTap(parseInt(index+1))">建筑类</view>
         </view>
       </view>
       <view class="flex-1 min-w-0 py-1">
-        <scroll-view :scroll-y="true" :scroll-with-animation="true" :scroll-top="scrollTop" style="height: calc(100vh - 3rem)" @scroll="handleScroll">
+        <scroll-view :scroll-y="true" :scroll-with-animation="true" :scroll-into-view="scrollViewId" style="height: calc(100vh - 3rem)" @scroll="handleScroll">
           <view class="px-3 pb-64">
-            <view class="mb-3 category-item">
+            <view class="mb-3 category-item" id="category-item-0">
               <view class="text-sm text-gray-900 py-2_5">推荐</view>
               <view class="grid grid-cols-2 gap-3">
                 <view class="bg-white px-1 py-3 text-center rounded-md shadow-sm">
@@ -35,7 +35,7 @@
                 </view>
               </view>
             </view>
-            <view class="mb-3 category-item" v-for="(item, index) in 10" :key="index">
+            <view class="mb-3 category-item" :id="'category-item-'+parseInt(index+1)" v-for="(item, index) in 10" :key="index">
               <view class="text-sm text-gray-900 py-2_5">建筑类</view>
               <view class="grid grid-cols-2 gap-3">
                 <view class="bg-white px-1 py-3 text-center rounded-md shadow-sm">
@@ -69,7 +69,7 @@ export default {
     return {
       searchIcon,
       currentIndex: 0,
-      scrollTop: 0,
+      scrollViewId: '',
       categoryTopList: [],
       clickFlag: true
     }
@@ -98,7 +98,7 @@ export default {
     handleNavTap(index) {
       this.clickFlag = false
       this.currentIndex = index
-      this.scrollTop = this.categoryTopList[index].startH
+      this.scrollViewId = 'category-item-'+index
       setTimeout(() => {
         this.clickFlag = true
       }, 300)
