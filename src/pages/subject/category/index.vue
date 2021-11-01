@@ -16,44 +16,46 @@
         </view>
       </view>
       <view class="flex-1 min-w-0 py-1">
-        <scroll-view :scroll-y="true" :scroll-with-animation="true" :scroll-into-view="scrollViewId" style="height: calc(100vh - 3rem)" @scroll="handleScroll">
-          <view class="px-3 pb-64">
-            <view class="mb-3 category-item" id="category-item-0">
-              <view class="text-sm text-gray-900 py-2_5">推荐</view>
-              <view class="grid grid-cols-2 gap-3">
-                <view class="bg-white px-1 py-3 text-center rounded-md shadow-sm">
-                  <view class="py-1_5 leading-none">
-                    <view class="inline-block w-5 h-5 border-2 border-solid border-gray-900"></view>
+        <view class="h-full">
+          <scroll-view :scroll-y="true" :scroll-with-animation="true" :scroll-into-view="scrollViewId" class="h-inherit" @scroll="handleScroll">
+            <view class="px-3 pb-64">
+              <view class="mb-3 category-item" id="category-item-0">
+                <view class="text-sm text-gray-900 py-2_5">推荐</view>
+                <view class="grid grid-cols-2 gap-3">
+                  <view class="bg-white px-1 py-3 text-center rounded-md shadow-sm">
+                    <view class="py-1_5 leading-none">
+                      <view class="inline-block w-5 h-5 border-2 border-solid border-gray-900"></view>
+                    </view>
+                    <view class="text-xs text-gray-900">中级会计师</view>
                   </view>
-                  <view class="text-xs text-gray-900">中级会计师</view>
+                  <view class="bg-white px-1 py-4 text-center rounded-md shadow-sm">
+                    <view class="py-1_5 leading-none">
+                      <view class="inline-block w-5 h-5 border-2 border-solid border-gray-900"></view>
+                    </view>
+                    <view class="text-xs text-gray-900">二级建造师</view>
+                  </view>
                 </view>
-                <view class="bg-white px-1 py-4 text-center rounded-md shadow-sm">
-                  <view class="py-1_5 leading-none">
-                    <view class="inline-block w-5 h-5 border-2 border-solid border-gray-900"></view>
+              </view>
+              <view class="mb-3 category-item" :id="'category-item-'+parseInt(index+1)" v-for="(item, index) in 10" :key="index">
+                <view class="text-sm text-gray-900 py-2_5">建筑类</view>
+                <view class="grid grid-cols-2 gap-3">
+                  <view class="bg-white px-1 py-3 text-center rounded-md shadow-sm">
+                    <view class="py-1_5 leading-none">
+                      <view class="inline-block w-5 h-5 border-2 border-solid border-gray-900"></view>
+                    </view>
+                    <view class="text-xs text-gray-900">中级会计师</view>
                   </view>
-                  <view class="text-xs text-gray-900">二级建造师</view>
+                  <view class="bg-white px-1 py-4 text-center rounded-md shadow-sm">
+                    <view class="py-1_5 leading-none">
+                      <view class="inline-block w-5 h-5 border-2 border-solid border-gray-900"></view>
+                    </view>
+                    <view class="text-xs text-gray-900">二级建造师</view>
+                  </view>
                 </view>
               </view>
             </view>
-            <view class="mb-3 category-item" :id="'category-item-'+parseInt(index+1)" v-for="(item, index) in 10" :key="index">
-              <view class="text-sm text-gray-900 py-2_5">建筑类</view>
-              <view class="grid grid-cols-2 gap-3">
-                <view class="bg-white px-1 py-3 text-center rounded-md shadow-sm">
-                  <view class="py-1_5 leading-none">
-                    <view class="inline-block w-5 h-5 border-2 border-solid border-gray-900"></view>
-                  </view>
-                  <view class="text-xs text-gray-900">中级会计师</view>
-                </view>
-                <view class="bg-white px-1 py-4 text-center rounded-md shadow-sm">
-                  <view class="py-1_5 leading-none">
-                    <view class="inline-block w-5 h-5 border-2 border-solid border-gray-900"></view>
-                  </view>
-                  <view class="text-xs text-gray-900">二级建造师</view>
-                </view>
-              </view>
-            </view>
-          </view>
-        </scroll-view>
+          </scroll-view>
+        </view>
       </view>
     </view>
   </view>
