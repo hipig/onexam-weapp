@@ -1,6 +1,6 @@
 <template>
   <view class="px-5">
-    <view>
+    <view class="mb-2">
       <view class="py-3">
         <view class="inline-block mr-1">
           <view class="px-1 text-xs rounded-sm" :class="[typeClasses]">{{ typeText }}</view>
@@ -24,17 +24,25 @@
       </view>
     </view>
     <view class="duration-300 ease-in-out" :class="[isRecite || isAnswered || isShowAnswer ? 'opacity-100' : 'opacity-0']">
-      <view class="py-4">
-        <text class="text-lg" :class="[checkCorrectOption(answer) ? 'text-green-500' : 'text-red-500']" v-if="isAnswered">{{ checkCorrectOption(answer) ? '回答正确' : '回答错误' }}</text>
-      </view>
-      <view class="py-1 flex">
-        <view class="mr-3">答案</view>
-        <view class="flex-1 min-w-0">
-          <text class="text-green-500">{{ correctAnswer }}</text>
+      <view class="py-2">
+        <view class="py-2 px-3 bg-gray-100 rounded">
+          <view class="text-lg" :class="[checkCorrectOption(answer) ? 'text-green-500' : 'text-red-500']" v-if="isAnswered">{{ checkCorrectOption(answer) ? '回答正确' : '回答错误' }}</view>
+          <view class="py-1 flex mt-1">
+            <view class="mr-4">答案</view>
+            <view class="flex-1 min-w-0">
+              <text class="text-green-500 font-bold">{{ correctAnswer }}</text>
+            </view>
+          </view>
+          <view class="flex mt-1" v-if="!checkCorrectOption(answer) && isAnswered">
+            <view class="mr-4">你的答案</view>
+            <view class="flex-1 min-w-0">
+              <text class="text-gray-900 font-bold">{{ answer }}</text>
+            </view>
+          </view>
         </view>
       </view>
       <view class="py-3 flex">
-        <view class="mr-3">解析</view>
+        <view class="mr-4 text-gray-500">解析</view>
         <view class="flex-1 min-w-0">
           <view v-html="parse"></view>
         </view>
@@ -65,7 +73,8 @@ export default {
   data() {
     return {
       checkIcon,
-      xIcon
+      xIcon,
+      optionsClasses: {}
     }
   },
   props: {
@@ -75,7 +84,7 @@ export default {
       default: 1
     },
     options: Object | null,
-    optionsClasses: Object | null,
+    // optionsClasses: Object | null,
     correctAnswer: {
       type: String | Array,
       default: ''
@@ -108,11 +117,30 @@ export default {
       return questionTypeMap[this.questionType].text
     }
   },
+  watch: {
+    isAnswered(val) {
+      if (val) {
+        this.calculateOptionClass()
+      }
+    }
+  },
   methods: {
     handleAnswer(key) {
       if (!this.isRecite && !this.isAnswered && !this.isShowAnswer) {
         eventCenter.trigger('on.answer', key)
       }
+    },
+    calculateOptionClass() {
+      _.forEach(this.options, (_, key) => {
+        let classes = ''
+        if (this.checkCorrectOption(key)) {
+          classes = 'bg-green-500 border-green-500'
+        }
+        if (this.checkInCorrectOption(key)) {
+          classes = 'bg-red-500 border-red-500'
+        }
+        this.$set(this.optionsClasses, key, classes)
+      })
     },
     checkCorrectOption(key) {
       switch(this.questionType) {
