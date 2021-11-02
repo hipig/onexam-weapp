@@ -158,6 +158,18 @@ export default {
         }
         this.$set(this.currentQuestion.optionsClasses, key, classes)
       })
+    },
+    checkCorrectOption(key) {
+      switch(this.questionType) {
+        case 1:
+          return key == this.correctAnswer
+      }
+    },
+    checkInCorrectOption(key) {
+      switch(this.questionType) {
+        case 1:
+          return key == this.answer && key != this.correctAnswer
+      }
     }
   }
 }
