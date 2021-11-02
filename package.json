@@ -39,8 +39,9 @@
     "@tarojs/components": "3.3.9",
     "@tarojs/runtime": "3.3.9",
     "@tarojs/taro": "3.3.9",
+    "vue": "^2.5.0",
     "vue-template-compiler": "^2.5.0",
-    "vue": "^2.5.0"
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@babel/core": "^7.8.0",

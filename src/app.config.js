@@ -6,8 +6,10 @@ export default {
     'pages/subject/index',
     'pages/subject/category/index',
 
-    'pages/exam/filter',
-    'pages/exam/modes/exercise'
+    'pages/bank/index',
+
+    'pages/start/filter',
+    'pages/start/index'
   ],
   window: {
     backgroundTextStyle: 'light',

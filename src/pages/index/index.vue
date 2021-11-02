@@ -59,13 +59,13 @@
     </view>
     <view class="px-5 py-4">
       <view class="grid grid-cols-2 gap-4">
-        <button class="w-full flex items-center justify-center py-3 bg-gradient-to-r from-green-400 to-green-500 text-white font-bold rounded-lg shadow-sm">
+        <button class="w-full flex items-center justify-center py-3 bg-gradient-to-r from-green-400 to-green-500 text-white font-bold rounded-lg shadow-sm" @tap="toBank">
           <view class="leading-none">
             <image :src="mockIcon" class="block h-6 w-6" />
           </view>
           <text class="ml-1">模拟试卷</text>
         </button>
-        <button class="w-full flex items-center justify-center py-3 bg-gradient-to-r from-green-400 to-green-500 text-white font-bold rounded-lg shadow-sm">
+        <button class="w-full flex items-center justify-center py-3 bg-gradient-to-r from-green-400 to-green-500 text-white font-bold rounded-lg shadow-sm" @tap="toBank">
           <view class="leading-none">
             <image :src="oldIcon" class="block h-6 w-6" />
           </view>
@@ -90,7 +90,7 @@
                   </view>
                 </view>
                 <view class="pl-4">
-                  <button class="px-5 py-1 bg-green-500 text-white text-sm rounded-md shadow-sm" @tap="handleQuiz">练习</button>
+                  <button class="px-5 py-1 bg-gradient-to-r from-green-400 to-green-500 text-white text-sm rounded-md shadow-sm" @tap="handleStart">练习</button>
                 </view>
               </view>
               <view class="absolute top-4_5 bottom-0 -left-5">
@@ -108,7 +108,7 @@
             <view class="flex flex-col" v-if="item.active">
               <view class="relative" v-for="(value, key) in item.children" :key="key">
                 <view class="flex items-center justify-between" :class="key === item.children.length-1 ? '' : 'border-0 border-b border-solid border-gray-100'">
-                  <view class="py-4 flex-1 flex flex-col">
+                  <view class="py-4 flex-1 min-w-0 flex flex-col">
                     <text class="text-sm text-gray-900">{{ value.name }}</text>
                     <view class="mt-1">
                       <view class="text-xs text-gray-500">{{ value.done_num + '/' + value.total_num }}</view>
@@ -118,7 +118,7 @@
                     </view>
                   </view>
                   <view class="pl-4">
-                    <button class="px-5 py-1 bg-green-500 text-white text-sm rounded-md shadow-sm" @tap="handleQuiz">练习</button>
+                    <button class="px-5 py-1 bg-gradient-to-r from-green-400 to-green-500 text-white text-sm rounded-md shadow-sm" @tap="handleStart">练习</button>
                   </view>
                 </view>
                 <view class="absolute top-0 -left-5" :class="key === item.children.length-1 ? 'h-4' : 'bottom-0'">
@@ -227,10 +227,15 @@ export default {
         url: '/pages/subject/index'
       })
     },
-    handleQuiz(e) {
+    handleStart(e) {
       e.stopPropagation()
       navigateTo({
-        url: '/pages/exam/filter'
+        url: '/pages/start/filter'
+      })
+    },
+    toBank() {
+      navigateTo({
+        url: '/pages/bank/index'
       })
     }
   }

@@ -1,8 +1,10 @@
 import Vue from 'vue'
+import store from './store'
 import './assets/css/font.css'
 import './app.css'
 
 const App = {
+  store,
   onShow (options) {
   },
   render(h) {

@@ -132,7 +132,7 @@ export default {
     },
     handleExercise() {
       navigateTo({
-        url:'/pages/exam/modes/exercise'
+        url:'/pages/start/index'
       })
     }
   }
