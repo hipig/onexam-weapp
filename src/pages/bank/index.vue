@@ -17,7 +17,7 @@
             </view>
           </view>
           <view class="px-3">
-            <button class="px-5 py-1 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white text-sm rounded-md shadow-sm whitespace-nowrap" @tap="handleStart">考试</button>
+            <button class="px-5 py-1_5 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white text-sm rounded-md shadow-sm whitespace-nowrap" @tap="handleStart">考试</button>
           </view>
         </view>
       </view>
@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     handleStart() {
-      
+
     }
   }
 }

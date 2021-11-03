@@ -8,11 +8,12 @@
         <text class="text-gray-900">{{ title }}</text>
       </view>
       <view class="py-2">
-        <single-choice-option v-if="questionType == 1" :is-answered="isAnswered" :options="options"></single-choice-option>
-        <multiple-choice-option v-if="questionType == 2" :is-answered="isAnswered" :options="options"></multiple-choice-option>
+        <single-choice-option v-if="questionType == 1" :is-answered="isExercise" :options="options"></single-choice-option>
+        <multiple-choice-option v-if="questionType == 2" :auto-submit="mode !== 'exercise'" :is-answered="isExercise" :options="options"></multiple-choice-option>
+        <fill-blank-option v-if="questionType == 4" :auto-submit="mode !== 'exercise'" :is-answered="isExercise" :options="correctAnswer"></fill-blank-option>
       </view>
     </view>
-    <view class="duration-300 ease-in-out" :class="[isRecite || isAnswered || isShowAnswer ? 'opacity-100' : 'opacity-0']">
+    <view class="duration-300 ease-in-out" :class="[isRecite || isExercise || isShowAnswer ? 'opacity-100' : 'opacity-0']">
       <view class="py-2">
         <view class="py-2 px-3 bg-gray-100 rounded">
           <view class="text-lg" :class="[isAnswerCorrect ? 'text-green-500' : 'text-red-500']" v-if="isAnswered">{{ isAnswerCorrect ? '回答正确' : '回答错误' }}</view>
@@ -43,6 +44,7 @@
 <script>
 import SingleChoiceOption from "./type/SingleChoice.vue"
 import MultipleChoiceOption from "./type/MultipleChoice.vue"
+import FillBlankOption from "./type/FillBlank.vue"
 
 const questionTypeMap = {
   1: {
@@ -52,6 +54,14 @@ const questionTypeMap = {
   2: {
     colorClasses: 'bg-yellow-500 text-white',
     text: '多选'
+  },
+  3: {
+    colorClasses: 'bg-gray-500 text-white',
+    text: '判断'
+  },
+  4: {
+    colorClasses: 'bg-blue-500 text-white',
+    text: '填空'
   }
 }
 
@@ -61,9 +71,14 @@ export default {
   },
   components: {
     SingleChoiceOption,
-    MultipleChoiceOption
+    MultipleChoiceOption,
+    FillBlankOption
   },
   props: {
+    mode: {
+      type: String,
+      default: 'exercise'
+    },
     title: String,
     questionType: {
       type: Number,
@@ -101,6 +116,9 @@ export default {
     }
   },
   computed: {
+    isExercise() {
+      return this.isAnswered && this.mode === 'exercise'
+    },
     typeClasses() {
       return questionTypeMap[this.questionType].colorClasses
     },
@@ -118,7 +136,9 @@ export default {
     formatAnswer(answer) {
       switch(this.questionType) {
         case 2:
-          return answer.join(', ') 
+          return answer.join(', ')
+        case 4:
+          return answer.join('，')
       }
 
       return answer

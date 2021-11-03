@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view :class="[isAnswered ? 'opacity-50 cursor-not-allowed' : '']">
     <view>
       <view class="py-3 flex items-center" v-for="(item, index) in options" :key="index" @tap="handleSelect(item.key)">
         <view class="pt-0_5">
@@ -16,8 +16,8 @@
         </view>
       </view>
     </view>
-    <view class="mt-3">
-      <button class="inline-flex py-1_5 px-5 bg-green-500 text-white text-sm rounded-md shadow-sm" @tap="handleAnswer">确定</button>
+    <view class="mt-3" v-if="!autoSubmit">
+      <button class="inline-flex py-1_5 px-5 bg-green-500 text-white text-base rounded-md shadow-sm" @tap="handleAnswer">确定</button>
     </view>
   </view>
 </template>
@@ -46,6 +46,10 @@ export default {
     isAnswered: {
       type: Boolean,
       default: false
+    },
+    autoSubmit: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -60,6 +64,7 @@ export default {
         }
 
         this.answer = answer
+        this.autoSubmit && this.handleAnswer()
       }
     },
     handleAnswer() {

@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import { navigateTo, showToast } from "@tarojs/taro"
+import { navigateTo } from "@tarojs/taro"
 
 import searchIcon from "../../assets/img/icons/search.svg"
 

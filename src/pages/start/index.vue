@@ -1,7 +1,7 @@
 <template>
   <view class="flex flex-col h-screen relative">
     <view class="border-0 border-b border-solid border-gray-100 bg-white">
-      <view class="py-1 flex justify-center">
+      <view class="py-1 flex justify-center" v-if="isExercise">
         <view class="flex items-center">
           <view class="w-20 h-7 border border-solid flex items-center justify-center rounded-l-full" :class="[!isRecite ? 'bg-green-500 text-white border-green-500 text-sm' : 'border-gray-100 text-gray-700 text-xs']" @tap="handleOnRecite(false)">答题模式</view>
           <view class="w-20 h-7 border border-solid flex items-center justify-center rounded-r-full" :class="[isRecite ? 'bg-green-500 text-white border-green-500 text-sm' : 'border-gray-100 text-gray-700 text-xs']" @tap="handleOnRecite(true)">背题模式</view>
@@ -13,7 +13,8 @@
       <swiper :current="currentIndex" class="flex-1" @change="handleChange">
         <swiper-item class="h-full" v-for="(question, index) in questionList" :key="index">
           <scroll-view :scroll-y="true" class="h-inherit">
-            <question-item :title="question.title"
+            <question-item :mode="mode"
+              :title="question.title"
               :question-type="question.type"
               :options="question.options"
               :correct-answer="question.answer"
@@ -28,7 +29,9 @@
         </swiper-item>
       </swiper>
     </view>
-    <exercise-toolbar :is-recite="isRecite" :is-answered="currentQuestion.isAnswered" :is-show-answer="currentQuestion.isShowAnswer"></exercise-toolbar>
+    <toolbar-exercise v-if="isExercise" :is-recite="isRecite" :is-answered="currentQuestion.isAnswered" :is-show-answer="currentQuestion.isShowAnswer"></toolbar-exercise>
+    <toolbar-test v-if="isTest" :done-time="doneTime"></toolbar-test>
+    <toolbar-exam v-if="isExam" :done-time="doneTime" :duration="120*60"></toolbar-exam>
     <view class="fixed inset-0 flex items-end overflow-hidden duration-500 z-50" :class="[isShowTab ? 'visible' : 'invisible']">
       <view class="absolute inset-0 bg-gray-900 bg-opacity-50 duration-500 ease-in-out" :class="[isShowTab ? 'opacity-100' : 'opacity-0']" @tap="isShowTab = false"></view>
       <view class="w-full h-4__5 px-5 bg-white rounded-t-3xl z-10 transform transition duration-700 ease-in-out" :class="[isShowTab ? 'translate-y-0' : 'translate-y-full']">
@@ -69,7 +72,9 @@ import { eventCenter, showToast } from "@tarojs/taro"
 
 import QuestionItem from "../../components/question/Item.vue"
 import Topbar from "../../components/start/Topbar.vue"
-import ExerciseToolbar from "../../components/start/toolbar/Exercise.vue"
+import ToolbarExercise from "../../components/start/toolbar/Exercise.vue"
+import ToolbarTest from "../../components/start/toolbar/Test.vue"
+import ToolbarExam from "../../components/start/toolbar/Exam.vue"
 
 import closeIcon from "../../assets/img/icons/close.svg"
 
@@ -79,15 +84,20 @@ export default {
       closeIcon,
       currentIndex: 0,
       questionList: [],
-      mode: 'exercise',
+      mode: 'exam',
       isShowTab: false,
-      isRecite: false
+      isRecite: false,
+      isPause: false,
+      doneTime: 0,
+      countdownText: '00:00:00'
     }
   },
   components: {
     Topbar,
     QuestionItem,
-    ExerciseToolbar
+    ToolbarExercise,
+    ToolbarTest,
+    ToolbarExam
   },
   mounted() {
     // 触发事件：答题
@@ -122,6 +132,15 @@ export default {
       console.log('event.show.answer: ', status)
       this.$set(this.currentQuestion, 'isShowAnswer',status)
     })
+  },
+  beforeDestroy() {
+    eventCenter.off('on.answer.question')
+    eventCenter.off('on.collect.question')
+    eventCenter.off('on.show.question.tab')
+    eventCenter.off('on.answer.question')
+    eventCenter.off('on.report.error')
+    eventCenter.off('on.take.note')
+    eventCenter.off('on.show.answer')
   },
   created() {
     let questionList = [
@@ -174,6 +193,14 @@ export default {
           }
         ],
         parse: "<p>本题考查的是法的效力层级。《招标投标法》属于法律的层面，大于其他几个法律形式。</p>"
+      },
+      {
+        id: 4,
+        type: 4,
+        title: "下列有关招标投标的法律文件中，法律效力最高的是（　）。",
+        answer: ['test', 'test'],
+        options: [],
+        parse: "<p>本题考查的是法的效力层级。《招标投标法》属于法律的层面，大于其他几个法律形式。</p>"
       }
     ]
 
@@ -190,13 +217,29 @@ export default {
 
       return item
     })
+
+    this.intervalEvent()
   },
   computed: {
+    isExercise() {
+      return this.mode === 'exercise'
+    },
+    isTest() {
+      return this.mode === 'test'
+    },
+    isExam() {
+      return this.mode === 'exam'
+    },
     currentQuestion() {
       return this.questionList[this.currentIndex]
     }
   },
   methods: {
+    intervalEvent() {
+      setInterval(_ => {
+        if (!this.isPause) this.doneTime++
+      }, 1000)
+    },
     handleOnRecite(status) {
       this.isRecite = status
     },
@@ -226,6 +269,7 @@ export default {
             this.$set(this.currentQuestion.options[index], 'result', result)
           })
           this.$set(this.currentQuestion, 'isAnswerCorrect', answer == correctAnswer)
+          break
         // 多选
         case 2:
           _.forEach(options, (option, index) => {
@@ -238,6 +282,7 @@ export default {
             this.$set(this.currentQuestion.options[index], 'result', result)
           })
           this.$set(this.currentQuestion, 'isAnswerCorrect', answer.sort().toString() === correctAnswer.sort().toString())
+          break
       }
     },
     handleToIndex(index) {
