@@ -33,8 +33,7 @@ export default {
     return {
       notesIcon,
       starIcon,
-      staredIcon,
-      isShowTab: false
+      staredIcon
     }
   },
   props: {
@@ -53,7 +52,7 @@ export default {
   },
   methods: {
     handleCollect() {
-      eventCenter.trigger('on.collect', !this.isCollected)
+      eventCenter.trigger('on.collect.question', !this.isCollected)
     },
     handleShowTab() {
       eventCenter.trigger('on.show.question.tab')

@@ -8,7 +8,7 @@
     </view>
     <view class="text-center text-xs text-gray-700" @tap="handleTakeNote">
       <view class="leading-none">
-        <image :src="editCircleIcon" class="inline-block h-5 w-5" />
+        <image :src="editCircleIcon" class="inline-block h-6 w-6" />
       </view>
       <view>写笔记</view>
     </view>
@@ -24,7 +24,6 @@
 
 <script>
 import { eventCenter } from "@tarojs/taro"
-import { mapGetters } from "vuex"
 
 import fileAlertIcon from "../../../assets/img/icons/file-alert.svg"
 import editCircleIcon from "../../../assets/img/icons/edit-circle.svg"
@@ -41,6 +40,10 @@ export default {
     }
   },
   props: {
+    isRecite: {
+      type: Boolean,
+      default: false
+    },
     isAnswered: {
       type: Boolean,
       default: false
@@ -49,11 +52,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-  computed: {
-    ...mapGetters({
-      'isRecite': 'basic/reciteStatus'
-    }),
   },
   methods: {
     handleReportError() {

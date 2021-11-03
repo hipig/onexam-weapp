@@ -8,35 +8,24 @@
         <text class="text-gray-900">{{ title }}</text>
       </view>
       <view class="py-2">
-        <view class="py-3 flex items-center" v-for="(text, key) in options" :key="key" @tap="handleAnswer(key)">
-          <view class="pt-0_5">
-            <view class="w-5 h-5 flex items-center justify-center border-2 border-solid border-gray-200 rounded-full" :class="[optionsClasses[key] || '']">
-              <view class="leading-none" v-if="isAnswered">
-                <image :src="checkIcon" v-if="checkCorrectOption(key)" class="block h-4 w-4" />
-                <image :src="xIcon" v-if="checkInCorrectOption(key)" class="block h-4 w-4" />
-              </view>
-            </view>
-          </view>
-          <view class="flex-1 min-w-0 ml-3">
-            <text class="text-sm">{{ key }}、{{ text }}</text>
-          </view>
-        </view>
+        <single-choice-option v-if="questionType == 1" :is-answered="isAnswered" :options="options"></single-choice-option>
+        <multiple-choice-option v-if="questionType == 2" :is-answered="isAnswered" :options="options"></multiple-choice-option>
       </view>
     </view>
     <view class="duration-300 ease-in-out" :class="[isRecite || isAnswered || isShowAnswer ? 'opacity-100' : 'opacity-0']">
       <view class="py-2">
         <view class="py-2 px-3 bg-gray-100 rounded">
-          <view class="text-lg" :class="[checkCorrectOption(answer) ? 'text-green-500' : 'text-red-500']" v-if="isAnswered">{{ checkCorrectOption(answer) ? '回答正确' : '回答错误' }}</view>
+          <view class="text-lg" :class="[isAnswerCorrect ? 'text-green-500' : 'text-red-500']" v-if="isAnswered">{{ isAnswerCorrect ? '回答正确' : '回答错误' }}</view>
           <view class="py-1 flex mt-1">
             <view class="mr-4">答案</view>
             <view class="flex-1 min-w-0">
-              <text class="text-green-500 font-bold">{{ correctAnswer }}</text>
+              <text class="text-green-500 font-bold">{{ correctAnswerText }}</text>
             </view>
           </view>
-          <view class="flex mt-1" v-if="!checkCorrectOption(answer) && isAnswered">
+          <view class="flex mt-1" v-if="!isAnswerCorrect && isAnswered">
             <view class="mr-4">你的答案</view>
             <view class="flex-1 min-w-0">
-              <text class="text-gray-900 font-bold">{{ answer }}</text>
+              <text class="text-gray-900 font-bold">{{ answerText }}</text>
             </view>
           </view>
         </view>
@@ -52,11 +41,8 @@
 </template>
 
 <script>
-import { eventCenter } from "@tarojs/taro"
-import { mapGetters } from "vuex"
-
-import checkIcon from "../../assets/img/icons/check.svg"
-import xIcon from "../../assets/img/icons/x.svg"
+import SingleChoiceOption from "./type/SingleChoice.vue"
+import MultipleChoiceOption from "./type/MultipleChoice.vue"
 
 const questionTypeMap = {
   1: {
@@ -71,11 +57,11 @@ const questionTypeMap = {
 
 export default {
   data() {
-    return {
-      checkIcon,
-      xIcon,
-      optionsClasses: {}
-    }
+    return {}
+  },
+  components: {
+    SingleChoiceOption,
+    MultipleChoiceOption
   },
   props: {
     title: String,
@@ -97,7 +83,15 @@ export default {
       type: String,
       default: ''
     },
+    isRecite: {
+      type: Boolean,
+      default: false
+    },
     isAnswered: {
+      type: Boolean,
+      default: false
+    },
+    isAnswerCorrect: {
       type: Boolean,
       default: false
     },
@@ -107,52 +101,27 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      'isRecite': 'basic/reciteStatus'
-    }),
     typeClasses() {
       return questionTypeMap[this.questionType].colorClasses
     },
     typeText() {
       return questionTypeMap[this.questionType].text
-    }
-  },
-  watch: {
-    isAnswered(val) {
-      if (val) {
-        this.calculateOptionClass()
-      }
+    },
+    answerText() {
+      return this.formatAnswer(this.answer)
+    },
+    correctAnswerText() {
+      return this.formatAnswer(this.correctAnswer)
     }
   },
   methods: {
-    handleAnswer(key) {
-      if (!this.isRecite && !this.isAnswered && !this.isShowAnswer) {
-        eventCenter.trigger('on.answer', key)
-      }
-    },
-    calculateOptionClass() {
-      _.forEach(this.options, (_, key) => {
-        let classes = ''
-        if (this.checkCorrectOption(key)) {
-          classes = 'bg-green-500 border-green-500'
-        }
-        if (this.checkInCorrectOption(key)) {
-          classes = 'bg-red-500 border-red-500'
-        }
-        this.$set(this.optionsClasses, key, classes)
-      })
-    },
-    checkCorrectOption(key) {
+    formatAnswer(answer) {
       switch(this.questionType) {
-        case 1:
-          return key == this.correctAnswer
+        case 2:
+          return answer.join(', ') 
       }
-    },
-    checkInCorrectOption(key) {
-      switch(this.questionType) {
-        case 1:
-          return key == this.answer && key != this.correctAnswer
-      }
+
+      return answer
     }
   }
 }

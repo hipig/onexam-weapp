@@ -10,7 +10,7 @@
           <view class="grid gap-3 text-sm" :class="[item.value === 'type' ? 'grid-cols-2' : 'grid-cols-3']">
             <view v-for="(option, i) in item.options" 
               :key="i"
-              class="p-2 text-center rounded" 
+              class="p-2 text-center rounded-md" 
               :class="[filterValue[item.value] == option.value ? 'bg-green-500 text-white' : 'bg-gray-100']"
               @tap="switchOption(item.value, option.value)"
             >{{ option.label }}</view>
@@ -21,8 +21,8 @@
     <view class="fixed bottom-0 inset-x-0">
       <view class="px-5 py-4">
         <view class="grid grid-cols-2 gap-4">
-          <button type="button" class="w-full py-3 px-3 bg-green-500 text-white rounded shadow-sm whitespace-nowrap" @tap="handleExercise">练习模式</button>
-          <button type="button" class="w-full py-3 px-3 bg-yellow-500 text-white rounded shadow-sm whitespace-nowrap">考试模式</button>
+          <button type="button" class="w-full py-3 px-3 bg-green-500 text-white rounded-md shadow-sm whitespace-nowrap" @tap="handleExercise">练习模式</button>
+          <button type="button" class="w-full py-3 px-3 bg-yellow-500 text-white rounded-md shadow-sm whitespace-nowrap">考试模式</button>
         </view>
       </view>
     </view>
