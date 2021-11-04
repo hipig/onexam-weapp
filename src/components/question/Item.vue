@@ -5,15 +5,16 @@
         <view class="inline-block mr-1">
           <view class="px-1 text-xs rounded-sm" :class="[typeClasses]">{{ typeText }}</view>
         </view>
-        <text class="text-gray-900">{{ title }}</text>
+        <text class="text-gray-900 text-base">{{ title }}</text>
       </view>
       <view class="py-2">
-        <single-choice-option v-if="questionType == 1" :is-answered="isExercise" :options="options"></single-choice-option>
-        <multiple-choice-option v-if="questionType == 2" :auto-submit="mode !== 'exercise'" :is-answered="isExercise" :options="options"></multiple-choice-option>
-        <fill-blank-option v-if="questionType == 4" :auto-submit="mode !== 'exercise'" :is-answered="isExercise" :options="correctAnswer"></fill-blank-option>
+        <single-choice-option v-if="questionType == 1" :is-answered="isAnsweredAndExercise" :options="options"></single-choice-option>
+        <multiple-choice-option v-if="questionType == 2" :auto-submit="!isExercise" :is-answered="isAnsweredAndExercise" :options="options"></multiple-choice-option>
+        <fill-blank-option v-if="questionType == 4" :auto-submit="!isExercise" :is-answered="isAnsweredAndExercise" :options="options"></fill-blank-option>
+        <short-answer-option v-if="questionType == 5" :auto-submit="!isExercise" :is-answered="isAnsweredAndExercise"></short-answer-option>
       </view>
     </view>
-    <view class="duration-300 ease-in-out" :class="[isRecite || isExercise || isShowAnswer ? 'opacity-100' : 'opacity-0']">
+    <view class="duration-300 ease-in-out" :class="[isRecite || isAnsweredAndExercise || isShowAnswer ? 'opacity-100' : 'opacity-0']">
       <view class="py-2">
         <view class="py-2 px-3 bg-gray-100 rounded">
           <view class="text-lg" :class="[isAnswerCorrect ? 'text-green-500' : 'text-red-500']" v-if="isAnswered">{{ isAnswerCorrect ? '回答正确' : '回答错误' }}</view>
@@ -45,6 +46,7 @@
 import SingleChoiceOption from "./type/SingleChoice.vue"
 import MultipleChoiceOption from "./type/MultipleChoice.vue"
 import FillBlankOption from "./type/FillBlank.vue"
+import ShortAnswerOption from "./type/ShortAnswer.vue"
 
 const questionTypeMap = {
   1: {
@@ -62,6 +64,10 @@ const questionTypeMap = {
   4: {
     colorClasses: 'bg-blue-500 text-white',
     text: '填空'
+  },
+  5: {
+    colorClasses: 'bg-purple-500 text-white',
+    text: '简答'
   }
 }
 
@@ -72,7 +78,8 @@ export default {
   components: {
     SingleChoiceOption,
     MultipleChoiceOption,
-    FillBlankOption
+    FillBlankOption,
+    ShortAnswerOption
   },
   props: {
     mode: {
@@ -117,7 +124,10 @@ export default {
   },
   computed: {
     isExercise() {
-      return this.isAnswered && this.mode === 'exercise'
+      return this.mode === 'exercise'
+    },
+    isAnsweredAndExercise() {
+      return this.isAnswered && this.isExercise
     },
     typeClasses() {
       return questionTypeMap[this.questionType].colorClasses

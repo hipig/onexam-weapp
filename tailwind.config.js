@@ -132,6 +132,9 @@ module.exports = {
     }),
     screens: {},
     extend: {
+      width: {
+        'initial': 'initial'
+      },
       height: {
         'inherit': 'inherit'
       },

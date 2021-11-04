@@ -84,7 +84,7 @@ export default {
       closeIcon,
       currentIndex: 0,
       questionList: [],
-      mode: 'exam',
+      mode: null,
       isShowTab: false,
       isRecite: false,
       isPause: false,
@@ -98,6 +98,9 @@ export default {
     ToolbarExercise,
     ToolbarTest,
     ToolbarExam
+  },
+  onLoad(options) {
+    this.mode = options.mode || 'exercise'
   },
   mounted() {
     // 触发事件：答题
@@ -201,6 +204,14 @@ export default {
         answer: ['test', 'test'],
         options: [],
         parse: "<p>本题考查的是法的效力层级。《招标投标法》属于法律的层面，大于其他几个法律形式。</p>"
+      },
+      {
+        id: 4,
+        type: 5,
+        title: "下列有关招标投标的法律文件中，法律效力最高的是（　）。",
+        answer: "参考答案是xxxx",
+        options: [],
+        parse: "<p>本题考查的是法的效力层级。《招标投标法》属于法律的层面，大于其他几个法律形式。</p>"
       }
     ]
 
@@ -210,6 +221,13 @@ export default {
       item.isAnswered = false
       item.isAnswerCorrect = false
       item.isShowAnswer = false
+      // hook
+      if (item.type == 4) {
+        item.options = _.map(item.answer, text => {
+          return {}
+        })
+      }
+
       item.options = _.map(item.options, option => {
         option.result = ''
         return option
@@ -255,10 +273,12 @@ export default {
       let options = this.currentQuestion.options
       let correctAnswer = this.currentQuestion.answer
       let questionType = this.currentQuestion.type
+      let results = []
 
       switch(questionType) {
         // 单选
         case 1:
+          results = []
           _.forEach(options, (option, index) => {
             let result = ''
             if (option.key == correctAnswer) {
@@ -266,12 +286,13 @@ export default {
             } else if (option.key == answer) {
               result = 'incorrect'
             }
+            results.push(result)
             this.$set(this.currentQuestion.options[index], 'result', result)
           })
-          this.$set(this.currentQuestion, 'isAnswerCorrect', answer == correctAnswer)
           break
         // 多选
         case 2:
+          results = []
           _.forEach(options, (option, index) => {
             let result = ''
             if (correctAnswer.indexOf(option.key) > -1) {
@@ -279,11 +300,33 @@ export default {
             } else if (answer.indexOf(option.key) > -1) {
               result = 'incorrect'
             }
+            results.push(result)
             this.$set(this.currentQuestion.options[index], 'result', result)
           })
-          this.$set(this.currentQuestion, 'isAnswerCorrect', answer.sort().toString() === correctAnswer.sort().toString())
+          break
+        // 填空
+        case 4:
+          results = []
+          _.forEach(correctAnswer, (item, index) => {
+            let result = ''
+            if (item == answer[index]) {
+              result = 'correct'
+            } else {
+              result = 'incorrect'
+            }
+            results.push(result)
+            this.$set(this.currentQuestion.options[index], 'result', result)
+          })
+          break
+        // 简答
+        case 5:
+          results = []
+          this.$set(this.currentQuestion, 'isAnswerCorrect', true)
           break
       }
+
+      let isAnswerCorrect = results.indexOf('incorrect') === -1
+      this.$set(this.currentQuestion, 'isAnswerCorrect', isAnswerCorrect)
     },
     handleToIndex(index) {
       this.currentIndex = index

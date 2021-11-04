@@ -1,11 +1,11 @@
 <template>
   <view class="flex flex-col">
-    <view class="px-5 py-3">
-      <view class="mb-3" v-for="(item, index) in bankList" :key="index">
-        <view class="w-full flex items-center bg-white py-4 rounded-sm">
-          <view class="px-3 flex-1 min-w-0">
+    <view class="px-5 py-4">
+      <view class="mb-4" v-for="(item, index) in bankList" :key="index">
+        <view class="flex items-center bg-white px-2 py-4 rounded-md shadow-sm">
+          <view class="px-2 flex-1 min-w-0">
             <view class="text-gray-900">{{ item.name }}</view>
-            <view class="text-xs text-gray-500">
+            <view class="mt-1 text-xs text-gray-500">
               <view class="py-1 flex items-center">
                 <text class="mr-3">{{ item.done_num + '/' + item.total_num }}</text>
                 <text class="mr-3">总分：{{ item.total_score }}分</text>
@@ -16,7 +16,7 @@
               </view>
             </view>
           </view>
-          <view class="px-3">
+          <view class="px-2">
             <button class="px-5 py-1_5 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white text-sm rounded-md shadow-sm whitespace-nowrap" @tap="handleStart">考试</button>
           </view>
         </view>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { navigateTo } from "@tarojs/taro"
+
 export default {
   data() {
     return {
@@ -59,8 +61,10 @@ export default {
   },
   methods: {
     handleStart() {
-
-    }
+      navigateTo({
+        url:'/pages/start/index?mode=exam'
+      })
+    },
   }
 }
 </script>

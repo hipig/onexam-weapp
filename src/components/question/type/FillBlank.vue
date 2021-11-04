@@ -1,8 +1,8 @@
 <template>
   <view :class="[isAnswered ? 'opacity-50 cursor-not-allowed' : '']">
     <view>
-      <view class="py-2 flex items-center" v-for="(_, index) in options" :key="index">
-        <input type="text" v-model="answer[index]" class="w-full px-3_5 py-2_5 text-base bg-white border border-solid border-gray-200 rounded-md shadow-sm" placeholder="请输入答案" @input="handleInput" :disabled="isAnswered" />
+      <view class="py-2 flex items-center" v-for="(option, index) in options" :key="index">
+        <input type="text" v-model="answer[index]" class="w-full px-3_5 py-2_5 text-sm bg-white border-2 border-solid border-gray-200 rounded-md" :class="[getOptionItemClasses(option.result)]" placeholder="请输入答案" @input="handleInput" :disabled="isAnswered" />
       </view>
     </view>
     <view class="mt-3" v-if="!autoSubmit">
@@ -45,18 +45,13 @@ export default {
         eventCenter.trigger('on.answer.question', this.answer)
       }
     },
-    getOptionItemClasses(key, result) {
-      let classes = ''
+    getOptionItemClasses(result) {
+      let classes = 'border-gray-200'
       if(this.isAnswered) {
         classes = optionsClassesMap[result] || 'border-gray-200'
-      } else {
-        classes = this.isOptionSelected(key) ? 'border-gray-900' : 'border-gray-200'
       }
 
       return classes
-    },
-    isOptionSelected(key) {
-      return this.answer.indexOf(key) > -1
     }
   }
 }
