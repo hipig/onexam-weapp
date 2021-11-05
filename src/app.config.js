@@ -2,6 +2,7 @@ export default {
   pages: [
     'pages/index/index',
     'pages/my/index',
+    'pages/auth/index',
 
     'pages/subject/index',
     'pages/subject/category/index',
@@ -9,7 +10,9 @@ export default {
     'pages/bank/index',
 
     'pages/start/filter',
-    'pages/start/index'
+    'pages/start/index',
+
+    'pages/notice/index'
   ],
   window: {
     backgroundTextStyle: 'light',

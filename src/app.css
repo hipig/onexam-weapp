@@ -12,6 +12,9 @@ button {
 button::after {
   @apply border-0;
 }
+button.button-hover {
+  @apply bg-opacity-95;
+}
 
 .blippo-becker {
   font-family: 'BlippoBeckerPoster';

@@ -7,7 +7,7 @@
           <view class="text-gray-500 text-sm mt-1">登录开始做题，逢考必过！</view>
         </view>
         <view>
-          <button class="py-1 px-6 bg-green-500 text-white text-sm rounded-full shadow-sm whitespace-nowrap">立即登录</button>
+          <button class="py-1_5 px-7 bg-green-500 text-white text-sm rounded-full shadow-sm whitespace-nowrap" @tap="handleTo('/pages/auth/index')">立即登录</button>
         </view>
       </view>
       <view class="py-4 grid grid-cols-3 gap-4">
@@ -50,7 +50,7 @@
     </view>
     <view class="py-2">
       <view class="py-2 px-5 bg-white flex flex-col">
-        <view class="py-3 flex items-center justify-between">
+        <view class="py-3 flex items-center justify-between" @tap="handleTo('/pages/notice/index')">
           <text>通知公告</text>
           <view class="leading-none">
             <image :src="chevronRightIcon" class="block w-5 h-5" />
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { getSystemInfo, createSelectorQuery } from "@tarojs/taro"
+import { navigateTo, getSystemInfo, createSelectorQuery } from "@tarojs/taro"
 import chevronRightIcon from "../../assets/img/icons/chevron-right.svg"
 
 const typeMap = {
@@ -153,6 +153,11 @@ export default {
       this.recordLeftList.forEach((item, index) => {
         let inView = scrollLeft > item.startW && scrollLeft <= item.endW
         if(inView) return this.currentIndex = parseInt(index + 1)
+      })
+    },
+    handleTo(url) {
+      navigateTo({
+        url: url
       })
     }
   }
