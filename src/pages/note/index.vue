@@ -1,12 +1,12 @@
 <template>
   <view class="flex flex-col">
     <view class="px-4 py-2 bg-white flex items-center justify-between">
-      <picker mode="selector" :range="categoryNameList" @change="handleChange">
+      <picker mode="selector" :range="filterNameList" @change="handleChange">
         <view class="flex items-center">
           <view class="leading-none">
             <image :src="filterIcon" class="block w-5 h-5" />
           </view>
-          <text class="text-sm">{{ categoryList[selectedIndex].name || '全部' }}({{ categoryList[selectedIndex].count || 0 }})</text>
+          <text class="text-sm text-gray-700">{{ filterList[selectedIndex].name || '全部' }}({{ filterList[selectedIndex].count || 0 }})</text>
         </view>
       </picker>
     </view>
@@ -16,13 +16,13 @@
           <view class="py-1">
             <view class="py-1 text-gray-900">{{ item.content }}</view>
             <view class="mt-3 p-2 text-xs bg-gray-50 border border-solid border-gray-100 rounded-sm">
-              <view class="flex items-start">
-                <view class="pt-0_5 mr-1">
-                  <view class="px-1 rounded-sm" :class="[questionTypeMap[item.question.type].colorClasses]">{{ questionTypeMap[item.question.type].text }}</view>
+              <view>
+                <view class="inline-flex mr-1">
+                  <view class="px-1 rounded-sm text-xs" :class="[questionTypeMap[item.question.type].colorClasses]">{{ questionTypeMap[item.question.type].text }}</view>
                 </view>
                 <text class="flex-1 min-w-0 text-sm text-gray-900">{{ item.question.title }}</text>
               </view>
-              <view class="mt-2">
+              <view class="mt-2 truncate">
                 <text class="text-gray-500 mr-1">来源</text>
                 <text class="text-gray-700">{{ item.bank.name }}</text>
               </view>
@@ -69,13 +69,13 @@ export default {
     return {
       filterIcon,
       questionTypeMap,
-      categoryList: [],
+      filterList: [],
       noteList: [],
       selectedIndex: 0
     }
   },
   created() {
-    this.categoryList = [
+    this.filterList = [
       {
         name: '中级会计师',
         count: 3
@@ -115,18 +115,18 @@ export default {
     ]
 
     let firstCount = 0
-    this.categoryList.forEach(item => {
+    this.filterList.forEach(item => {
       firstCount += item.count
     })
 
-    this.categoryList.unshift({
+    this.filterList.unshift({
       name: '全部',
       count: firstCount
     })
   },
   computed: {
-    categoryNameList() {
-      return this.categoryList.map(item => {
+    filterNameList() {
+      return this.filterList.map(item => {
         return item.name
       })
     }

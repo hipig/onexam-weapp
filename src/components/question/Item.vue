@@ -2,19 +2,19 @@
   <view class="px-5">
     <view class="mb-2">
       <view class="py-3">
-        <view class="inline-block mr-1">
+        <view class="inline-flex mr-1">
           <view class="px-1 text-xs rounded-sm" :class="[typeClasses]">{{ typeText }}</view>
         </view>
         <text class="text-gray-900 text-base">{{ title }}</text>
       </view>
       <view class="py-2">
-        <single-choice-option v-if="questionType == 1" :is-answered="isAnsweredAndExercise" :options="options"></single-choice-option>
-        <multiple-choice-option v-if="questionType == 2" :auto-submit="!isExercise" :is-answered="isAnsweredAndExercise" :options="options"></multiple-choice-option>
-        <fill-blank-option v-if="questionType == 4" :auto-submit="!isExercise" :is-answered="isAnsweredAndExercise" :options="options"></fill-blank-option>
-        <short-answer-option v-if="questionType == 5" :auto-submit="!isExercise" :is-answered="isAnsweredAndExercise"></short-answer-option>
+        <single-choice-option v-if="questionType == 1 || questionType == 3" :is-answered="isEnableAnswer" :options="options"></single-choice-option>
+        <multiple-choice-option v-if="questionType == 2" :auto-submit="!isExercise" :is-answered="isEnableAnswer" :options="options"></multiple-choice-option>
+        <fill-blank-option v-if="questionType == 4" :auto-submit="!isExercise" :is-answered="isEnableAnswer" :options="options"></fill-blank-option>
+        <short-answer-option v-if="questionType == 5" :auto-submit="!isExercise" :is-answered="isEnableAnswer"></short-answer-option>
       </view>
     </view>
-    <view class="duration-300 ease-in-out" :class="[isRecite || isAnsweredAndExercise || isShowAnswer ? 'opacity-100' : 'opacity-0']">
+    <view class="duration-300 ease-in-out" :class="[isEnableAnswer ? 'opacity-100' : 'opacity-0']">
       <view class="py-2">
         <view class="py-2 px-3 bg-gray-100 rounded">
           <view class="text-lg" :class="[isAnswerCorrect ? 'text-green-500' : 'text-red-500']" v-if="isAnswered">{{ isAnswerCorrect ? '回答正确' : '回答错误' }}</view>
@@ -58,7 +58,7 @@ const questionTypeMap = {
     text: '多选'
   },
   3: {
-    colorClasses: 'bg-gray-500 text-white',
+    colorClasses: 'bg-indigo-500 text-white',
     text: '判断'
   },
   4: {
@@ -92,7 +92,6 @@ export default {
       default: 1
     },
     options: Object | null,
-    // optionsClasses: Object | null,
     correctAnswer: {
       type: String | Array,
       default: ''
@@ -126,8 +125,8 @@ export default {
     isExercise() {
       return this.mode === 'exercise'
     },
-    isAnsweredAndExercise() {
-      return this.isAnswered && this.isExercise
+    isEnableAnswer() {
+      return this.isAnswered && this.isExercise || this.isShowAnswer || this.isRecite
     },
     typeClasses() {
       return questionTypeMap[this.questionType].colorClasses
@@ -146,9 +145,8 @@ export default {
     formatAnswer(answer) {
       switch(this.questionType) {
         case 2:
-          return answer.join(', ')
         case 4:
-          return answer.join('，')
+          return answer.join('、')
       }
 
       return answer

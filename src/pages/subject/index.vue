@@ -3,7 +3,12 @@
     <view class="px-5 py-2 bg-white">
       <view class="py-1 flex items-center justify-between text-sm">
         <view class="text-gray-500">当前考试</view>
-        <view class="text-green-500" @tap="switchSubjectCategory">切换考试></view>
+        <view class="flex items-center text-green-500" @tap="switchSubjectCategory">
+          <text>切换考试</text>
+          <view class="leading-none">
+            <image :src="chevronRightIcon" class="block h-4 w-4" />
+          </view>
+        </view>
       </view>
       <view class="py-4 flex justify-center text-sm">
         <view class="flex flex-col items-center">
@@ -33,10 +38,13 @@
 
 <script>
 import { navigateTo } from "@tarojs/taro"
+import chevronRightIcon from "../../assets/img/icons/chevron-right-primary.svg"
 
 export default {
   data() {
-    return {}
+    return {
+      chevronRightIcon
+    }
   },
   methods: {
     switchSubjectCategory() {

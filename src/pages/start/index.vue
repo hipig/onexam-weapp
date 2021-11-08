@@ -198,6 +198,23 @@ export default {
         parse: "<p>本题考查的是法的效力层级。《招标投标法》属于法律的层面，大于其他几个法律形式。</p>"
       },
       {
+        id: 3,
+        type: 3,
+        title: "甲公司授权其采购员到乙公司购买一批电视机，并交给该采购员一份已盖公司公章的空白合同书，该采购员用此合同书与乙公司订立了购买电视机的合同。乙公司按时交货后未收到货款，双方发生纠纷后，乙公司应（　）",
+        answer: 'A',
+        options: [
+          {
+            key: 'A',
+            text: '是'
+          },
+          {
+            key: 'B',
+            text: '否'
+          }
+        ],
+        parse: "采购员的代理行为属于委托代理，代理产生的后果由委托人承担。"
+      },
+      {
         id: 4,
         type: 4,
         title: "下列有关招标投标的法律文件中，法律效力最高的是（　）。",
@@ -276,8 +293,9 @@ export default {
       let results = []
 
       switch(questionType) {
-        // 单选
+        // 单选||判断
         case 1:
+        case 3:
           results = []
           _.forEach(options, (option, index) => {
             let result = ''
