@@ -2,7 +2,7 @@
   <view :class="[isAnswered ? 'opacity-50 cursor-not-allowed' : '']">
     <view>
       <view class="py-2 flex items-center" v-for="(option, index) in options" :key="index">
-        <input type="text" v-model="answer[index]" class="w-full px-3_5 py-2_5 text-sm bg-white border-2 border-solid border-gray-200 rounded-md" :class="[getOptionItemClasses(option.result)]" placeholder="请输入答案" @input="handleInput" :disabled="isAnswered" />
+        <input type="text" v-model="answer[index]" class="w-full px-3_5 py-2_5 text-sm bg-white border-2 border-solid border-gray-200 rounded-md" :class="[optionsClasses[index] || 'border-gray-200']" placeholder="请输入答案" @input="handleInput" :disabled="isAnswered" />
       </view>
     </view>
     <view class="mt-3" v-if="!autoSubmit">
@@ -22,7 +22,8 @@ const optionsClassesMap = {
 export default {
   data() {
     return {
-      answer: []
+      answer: [],
+      optionsClasses: []
     }
   },
   props: {
@@ -36,6 +37,15 @@ export default {
       default: false
     }
   },
+  watch: {
+    isAnswered(val) {
+      if (val) {
+        this.options.forEach((option, index) => {
+          this.optionsClasses[index] = optionsClassesMap[option.result] || 'border-gray-200'
+        })
+      }
+    }
+  },
   methods: {
     handleInput() {
       this.autoSubmit && this.handleAnswer()
@@ -44,14 +54,6 @@ export default {
       if (!this.isAnswered && this.answer.length === this.options.length) {
         eventCenter.trigger('on.answer.question', this.answer)
       }
-    },
-    getOptionItemClasses(result) {
-      let classes = 'border-gray-200'
-      if(this.isAnswered) {
-        classes = optionsClassesMap[result] || 'border-gray-200'
-      }
-
-      return classes
     }
   }
 }

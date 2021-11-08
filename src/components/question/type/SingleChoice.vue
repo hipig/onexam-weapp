@@ -1,8 +1,8 @@
 <template>
   <view :class="[isAnswered ? 'opacity-50 cursor-not-allowed' : '']">
-    <view class="py-3 flex items-center" v-for="(item, index) in options" :key="index" @tap="handleSelect(item.key)">
+    <view class="py-3 flex items-center" v-for="(item, index) in options" :key="index" @tap="handleSelect(item.key, index)">
       <view class="pt-0_5">
-        <view class="w-5 h-5 flex items-center justify-center border-2 border-solid rounded-full" :class="[getOptionsClasses(item.key, item.result)]">
+        <view class="w-5 h-5 flex items-center justify-center border-2 border-solid rounded-full" :class="[optionsClasses[index] || 'border-gray-200']">
           <view class="w-2_5 h-2_5 rounded-full bg-gray-900" v-if="!isAnswered && isOptionSelected(item.key)"></view>
           <view class="leading-none" v-if="isAnswered">
             <image :src="checkIcon" v-if="item.result && item.result === 'correct'" class="block h-4 w-4" />
@@ -33,8 +33,8 @@ export default {
     return {
       checkIcon,
       xIcon,
-      optionsClassesMap,
-      answer: ''
+      answer: '',
+      optionsClasses: []
     }
   },
   props: {
@@ -48,25 +48,33 @@ export default {
       default: true
     }
   },
+  watch: {
+    isAnswered(val) {
+      if (val) {
+        this.options.forEach((option, index) => {
+          this.$set(this.optionsClasses, index, optionsClassesMap[option.result] || 'border-gray-200')
+        })
+      }
+    }
+  },
   methods: {
     handleSelect(answer) {
-      this.answer = answer
-      this.autoSubmit && this.handleAnswer()
+      if (!this.isAnswered) {
+        this.answer = answer
+        this.toggleOptionSelected()
+        this.autoSubmit && this.handleAnswer()
+      }
     },
     handleAnswer() {
       if (!this.isAnswered) {
         eventCenter.trigger('on.answer.question', this.answer)
       }
     },
-    getOptionsClasses(key, result) {
-      let classes = ''
-      if (this.isAnswered) {
-        classes = optionsClassesMap[result] || 'border-gray-200'
-      } else {
-        classes = this.isOptionSelected(key) ? 'border-gray-900' : 'border-gray-200'
-      }
-
-      return classes
+    toggleOptionSelected() {
+      this.options.forEach((option, index) => {
+        let classes = this.isOptionSelected(option.key) ? 'border-gray-900' : 'border-gray-200'
+        this.$set(this.optionsClasses, index, classes)
+      })
     },
     isOptionSelected(key) {
       return this.answer == key

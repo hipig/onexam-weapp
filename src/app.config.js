@@ -12,6 +12,8 @@ export default {
     'pages/start/filter',
     'pages/start/index',
 
+    'pages/note/index',
+
     'pages/notice/index'
   ],
   window: {

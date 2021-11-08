@@ -15,7 +15,7 @@
           <view class="text-gray-900 text-3xl blippo-becker">0</view>
           <view class="text-sm">收藏</view>
         </view>
-        <view class="py-2_5 bg-white text-center rounded-md shadow">
+        <view class="py-2_5 bg-white text-center rounded-md shadow" @tap="handleTo('/pages/note/index')">
           <view class="text-gray-900 text-3xl blippo-becker">0</view>
           <view class="text-sm">笔记</view>
         </view>
